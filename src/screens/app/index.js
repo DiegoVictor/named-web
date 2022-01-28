@@ -25,6 +25,13 @@ function App() {
         setLoading(false);
       });
   }, [dataset]);
+
+  useEffect(() => {
+    if (dataset) {
+      reList(dataset);
+    }
+  }, [dataset, reList]);
+
   return (
     <div>
       <Search onSelect={setDataset} />
