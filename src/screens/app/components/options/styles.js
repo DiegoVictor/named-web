@@ -70,7 +70,6 @@ export const File = styled.div`
 
 export const Dataset = styled.div`
   align-items: center;
-  background-color: ${(props) => (props.selected ? "#eaecf0" : "#fff")};
   border-radius: 8px;
   color: rgb(54, 55, 70);
   cursor: pointer;

@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const Container = styled.div`
   color: #fff;
-  background-color: ${(props) => (props.color ? props.color : "#2497fc")};
+  background-color: ${(props) => props.color && props.color};
   border-radius: 4px;
   font-size: 12px;
   font-weight: 600;
