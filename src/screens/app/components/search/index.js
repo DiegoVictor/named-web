@@ -66,15 +66,14 @@ function Search({ onSelect }) {
       <Options
         data={results}
         open={open}
-        onSelect={(dataset, custom = null) => {
-          if (custom) {
-            setDatasets([...datasets, dataset]);
-            setOpen(true);
-          } else {
-            setOpen(false);
+        onSelect={(dataset, custom = false) => {
+          if (!custom) {
             setQuery("");
             onSelect(dataset);
+          } else {
+            setDatasets([...datasets, dataset]);
           }
+          setOpen(custom);
         }}
       />
     </Modal>
