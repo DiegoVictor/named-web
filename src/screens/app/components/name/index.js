@@ -40,6 +40,7 @@ function Name({ value, onFeedback }) {
           setFeedback(newValue);
           onFeedback(newValue);
         }}
+        data-testid={`name-${value.replace(/\s/gi, "")}`}
       >
         {getFeedbackIcon(value)}
         <span>

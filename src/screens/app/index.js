@@ -72,6 +72,7 @@ function App() {
               onClick={() => reList(dataset)}
               disabled={loading}
               $rotate={loading === "list"}
+              data-testid="refresh"
             >
               <AiOutlineReload size={20} color="#bbb" />
               <span>Refresh</span>
@@ -80,6 +81,7 @@ function App() {
               onClick={sendFeedback}
               disabled={loading}
               $rotate={loading === "feedback"}
+              data-testid="feedback"
             >
               <span>Send Feedback</span>
               {loading === "feedback" ? (
