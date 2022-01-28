@@ -15,38 +15,40 @@ function Options({ open, data, onSelect }) {
       const [file] = fileRef?.current?.files;
       const reader = new FileReader();
 
-      reader.onload = (event) => {
-        if (event.target.result.search(/^name\r\n/i) === -1) {
+      reader.onload = async (event) => {
+        if (event.target.result.search(/^name\r?\n/i) === -1) {
           alert('The first line must be the header "name"');
+          setUploading(false);
+          return;
         }
 
         const rows = event.target.result
-          .replace(/^name\r\n/gi, "")
-          .split("\r\n");
+          .replace(/(^name\r?\n|\r)/gi, "")
+          .split("\n");
 
         if (rows.length > 22) {
           const formData = new FormData();
 
-          formData.append("file", fileRef.current.files[0]);
-          return axios
-            .post(`${process.env.REACT_APP_API_BASE_URL}/upload`, formData)
-            .then((response) => {
-              onSelect(
-                {
-                  id: response.data.id,
-                  category: "Custom",
-                  color:
-                    "#" +
-                    ((Math.random() * 0xffffff) << 0)
-                      .toString(16)
-                      .padStart(6, "0"),
-                  title: file.name,
-                  tmp: 1,
-                },
-                true
-              );
-              setUploading(false);
-            });
+          formData.append("file", file);
+          const { data } = await axios.post(
+            `${process.env.REACT_APP_API_BASE_URL}/upload`,
+            formData
+          );
+
+          onSelect(
+            {
+              id: data.id,
+              category: "Custom",
+              color:
+                "#" +
+                ((Math.random() * 0xffffff) << 0).toString(16).padStart(6, "0"),
+              title: file.name,
+              tmp: 1,
+            },
+            true
+          );
+          setUploading(false);
+          return;
         }
         alert("The CSV file must have at least 23 names");
       };
@@ -57,13 +59,7 @@ function Options({ open, data, onSelect }) {
   return (
     <Container open={uploading || open} data-testid="options">
       <File>
-        <input
-          type="file"
-          ref={fileRef}
-          onChange={upload}
-          onClick={() => setUploading(true)}
-          onFocus={() => setUploading(false)}
-        />
+        <input type="file" ref={fileRef} data-testid="file" onChange={upload} />
         <div>
           <div>
             <IoMdCloudUpload size={24} />
