@@ -6,18 +6,18 @@ import { Container } from "./styles";
 function List({ data, onFeedback }) {
   return (
     <Container>
-      {data.map((item, index) => {
+      {data.map((item) => {
         return (
           <Name
-            key={`${item.name}${index}`}
+            key={`${item.name}`}
             value={item.name}
             onFeedback={(value) => {
               const updatedNames = [...data];
-              const index = updatedNames.findIndex(
+              const nameIndex = updatedNames.findIndex(
                 ({ name }) => name === item.name
               );
 
-              updatedNames.splice(index, 1, {
+              updatedNames.splice(nameIndex, 1, {
                 ...item,
                 value,
               });

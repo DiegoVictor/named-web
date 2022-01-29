@@ -31,7 +31,8 @@ function Name({ value, onFeedback }) {
 
   return (
     <Container>
-      <span
+      <button
+        type="button"
         onClick={() => {
           let newValue = feedback + 1;
           if (newValue > 1) {
@@ -49,7 +50,7 @@ function Name({ value, onFeedback }) {
             .map((string) => capitalize(string))
             .join(" ")}
         </span>
-      </span>
+      </button>
     </Container>
   );
 }

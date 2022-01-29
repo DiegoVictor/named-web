@@ -11,11 +11,11 @@ function Options({ open, data, onSelect }) {
   const [uploading, setUploading] = useState(false);
 
   const upload = useCallback(() => {
-    if (fileRef?.current?.files[0]) {
-      const [file] = fileRef?.current?.files;
+    if (fileRef.current.files) {
+      const [file] = fileRef.current.files;
       const reader = new FileReader();
 
-      reader.onload = async (event) => {
+      reader.onload = (event) => {
         if (event.target.result.search(/^name\r?\n/i) === -1) {
           alert('The first line must be the header "name"');
           setUploading(false);
@@ -30,25 +30,24 @@ function Options({ open, data, onSelect }) {
           const formData = new FormData();
 
           formData.append("file", file);
-          const { data } = await axios.post(
-            `${process.env.REACT_APP_API_BASE_URL}/upload`,
-            formData
-          );
-
-          onSelect(
-            {
-              id: data.id,
-              category: "Custom",
-              color:
-                "#" +
-                ((Math.random() * 0xffffff) << 0).toString(16).padStart(6, "0"),
-              title: file.name,
-              tmp: 1,
-            },
-            true
-          );
-          setUploading(false);
-          return;
+          axios
+            .post(`${process.env.REACT_APP_API_BASE_URL}/upload`, formData)
+            .then((response) => {
+              onSelect(
+                {
+                  id: response.data.id,
+                  category: "Custom",
+                  // eslint-disable-next-line no-bitwise
+                  color: `#${((Math.random() * 0xffffff) << 0)
+                    .toString(16)
+                    .padStart(6, "0")}`,
+                  title: file.name,
+                  tmp: 1,
+                },
+                true
+              );
+              setUploading(false);
+            });
         }
         alert("The CSV file must have at least 23 names");
       };
