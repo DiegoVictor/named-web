@@ -1,7 +1,7 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 
-import { Container } from "./styles";
+import { Container } from './styles';
 
 function Tag({ children, color }) {
   return <Container color={color}>{children}</Container>;
@@ -13,7 +13,7 @@ Tag.propTypes = {
 };
 
 Tag.defaultProps = {
-  color: "",
+  color: '',
 };
 
 export default Tag;

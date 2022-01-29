@@ -1,8 +1,8 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 
-import Name from "../name";
-import { Container } from "./styles";
+import Name from '../name';
+import { Container } from './styles';
 
 function List({ data, onFeedback }) {
   return (

@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { GoSearch } from "react-icons/go";
-import { GrFormClose } from "react-icons/gr";
-import axios from "axios";
-import PropTypes from "prop-types";
+import React, { useEffect, useState } from 'react';
+import { GoSearch } from 'react-icons/go';
+import { GrFormClose } from 'react-icons/gr';
+import axios from 'axios';
+import PropTypes from 'prop-types';
 
-import Input from "../../../../components/input";
-import { Modal } from "../../../../components/modal/styles";
-import Options from "../options";
+import Input from 'components/input';
+import { Modal } from 'components/modal/styles';
+import Options from '../options';
 
 function Search({ onSelect }) {
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState('');
 
   const [results, setResults] = useState([]);
   const [datasets, setDatasets] = useState([]);
@@ -27,7 +27,7 @@ function Search({ onSelect }) {
     if (query.length > 2) {
       setResults(
         datasets.filter(
-          ({ title }) => title.search(new RegExp(query, "gi")) > -1
+          ({ title }) => title.search(new RegExp(query, 'gi')) > -1
         )
       );
     } else {
@@ -56,7 +56,7 @@ function Search({ onSelect }) {
               data-testid="clear"
               onClick={() => {
                 setOpen(false);
-                setQuery("");
+                setQuery('');
               }}
             >
               <GrFormClose size={26} color="#CBCDD7" />
@@ -69,7 +69,7 @@ function Search({ onSelect }) {
         open={open}
         onSelect={(dataset, custom = false) => {
           if (!custom) {
-            setQuery("");
+            setQuery('');
             onSelect(dataset);
           } else {
             setDatasets([...datasets, dataset]);

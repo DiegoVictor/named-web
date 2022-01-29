@@ -1,10 +1,10 @@
-import React, { useCallback, useRef, useState } from "react";
-import PropTypes from "prop-types";
-import { IoMdCloudUpload } from "react-icons/io";
-import axios from "axios";
+import React, { useCallback, useRef, useState } from 'react';
+import PropTypes from 'prop-types';
+import { IoMdCloudUpload } from 'react-icons/io';
+import axios from 'axios';
 
-import Tag from "../../../../components/tag";
-import { Container, Dataset, File, NotFound } from "./styles";
+import Tag from 'components/tag';
+import { Container, Dataset, File, NotFound } from './styles';
 
 function Options({ open, data, onSelect }) {
   const fileRef = useRef();
@@ -23,24 +23,24 @@ function Options({ open, data, onSelect }) {
         }
 
         const rows = event.target.result
-          .replace(/(^name\r?\n|\r)/gi, "")
-          .split("\n");
+          .replace(/(^name\r?\n|\r)/gi, '')
+          .split('\n');
 
         if (rows.length > 22) {
           const formData = new FormData();
 
-          formData.append("file", file);
+          formData.append('file', file);
           axios
             .post(`${process.env.REACT_APP_API_BASE_URL}/upload`, formData)
             .then((response) => {
               onSelect(
                 {
                   id: response.data.id,
-                  category: "Custom",
+                  category: 'Custom',
                   // eslint-disable-next-line no-bitwise
                   color: `#${((Math.random() * 0xffffff) << 0)
                     .toString(16)
-                    .padStart(6, "0")}`,
+                    .padStart(6, '0')}`,
                   title: file.name,
                   tmp: 1,
                 },
@@ -49,7 +49,7 @@ function Options({ open, data, onSelect }) {
               setUploading(false);
             });
         }
-        alert("The CSV file must have at least 23 names");
+        alert('The CSV file must have at least 23 names');
       };
       reader.readAsText(fileRef.current.files[0]);
     }

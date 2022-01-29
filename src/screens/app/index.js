@@ -1,12 +1,12 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { AiOutlineReload } from "react-icons/ai";
-import { BiLoaderAlt } from "react-icons/bi";
-import { BsArrowRightSquareFill } from "react-icons/bs";
-import axios from "axios";
+import React, { useCallback, useEffect, useState } from 'react';
+import { AiOutlineReload } from 'react-icons/ai';
+import { BiLoaderAlt } from 'react-icons/bi';
+import { BsArrowRightSquareFill } from 'react-icons/bs';
+import axios from 'axios';
 
-import Search from "./components/search";
-import List from "./components/list";
-import { Actions, Button, Container } from "./styles";
+import Search from './components/search';
+import List from './components/list';
+import { Actions, Button, Container } from './styles';
 
 function App() {
   const [dataset, setDataset] = useState(null);
@@ -14,7 +14,7 @@ function App() {
   const [names, setNames] = useState([]);
   const [loading, setLoading] = useState(false);
   const reList = useCallback(() => {
-    setLoading("list");
+    setLoading('list');
 
     axios
       .get(`${process.env.REACT_APP_API_BASE_URL}/names`, {
@@ -40,7 +40,7 @@ function App() {
   }, [dataset, reList]);
 
   const sendFeedback = useCallback(() => {
-    setLoading("feedback");
+    setLoading('feedback');
     axios
       .post(
         `${process.env.REACT_APP_API_BASE_URL}/datasets/${dataset.id}/feedbacks`,
@@ -71,7 +71,7 @@ function App() {
               type="button"
               onClick={() => reList(dataset)}
               disabled={loading}
-              $rotate={loading === "list"}
+              $rotate={loading === 'list'}
               data-testid="refresh"
             >
               <AiOutlineReload size={20} color="#bbb" />
@@ -80,11 +80,11 @@ function App() {
             <Button
               onClick={sendFeedback}
               disabled={loading}
-              $rotate={loading === "feedback"}
+              $rotate={loading === 'feedback'}
               data-testid="feedback"
             >
               <span>Send Feedback</span>
-              {loading === "feedback" ? (
+              {loading === 'feedback' ? (
                 <BiLoaderAlt size={20} />
               ) : (
                 <BsArrowRightSquareFill size={20} color="#bbb" />

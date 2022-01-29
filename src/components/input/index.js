@@ -1,7 +1,7 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 
-import { Container, Icon } from "./styles";
+import { Container, Icon } from './styles';
 
 function Input({ value, onChange, left, right, ...props }) {
   return (

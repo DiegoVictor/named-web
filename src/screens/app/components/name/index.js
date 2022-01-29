@@ -1,16 +1,16 @@
-import React, { useCallback, useMemo, useState } from "react";
-import PropTypes from "prop-types";
+import React, { useCallback, useMemo, useState } from 'react';
+import PropTypes from 'prop-types';
 import {
   BsFillEmojiFrownFill,
   BsFillEmojiLaughingFill,
   BsFillEmojiNeutralFill,
-} from "react-icons/bs";
+} from 'react-icons/bs';
 
-import { Container } from "./styles";
+import { Container } from './styles';
 
 function Name({ value, onFeedback }) {
   const capitalize = useCallback(
-    (text) => [text[0].toUpperCase(), text.slice(1)].join(""),
+    (text) => [text[0].toUpperCase(), text.slice(1)].join(''),
     []
   );
 
@@ -18,7 +18,7 @@ function Name({ value, onFeedback }) {
 
   const iconMap = useMemo(
     () => ({
-      "-1": BsFillEmojiFrownFill,
+      '-1': BsFillEmojiFrownFill,
       0: BsFillEmojiNeutralFill,
       1: BsFillEmojiLaughingFill,
     }),
@@ -42,14 +42,14 @@ function Name({ value, onFeedback }) {
           setFeedback(newValue);
           onFeedback(newValue);
         }}
-        data-testid={`name-${value.replace(/\s/gi, "")}`}
+        data-testid={`name-${value.replace(/\s/gi, '')}`}
       >
         {getFeedbackIcon(value)}
         <span>
           {value
-            .split(" ")
+            .split(' ')
             .map((string) => capitalize(string))
-            .join(" ")}
+            .join(' ')}
         </span>
       </button>
     </Container>
