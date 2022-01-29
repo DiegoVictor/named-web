@@ -1,4 +1,5 @@
 import React, { useCallback, useMemo, useState } from "react";
+import PropTypes from "prop-types";
 import {
   BsFillEmojiFrownFill,
   BsFillEmojiLaughingFill,
@@ -54,5 +55,10 @@ function Name({ value, onFeedback }) {
     </Container>
   );
 }
+
+Name.propTypes = {
+  value: PropTypes.string.isRequired,
+  onFeedback: PropTypes.func.isRequired,
+};
 
 export default Name;

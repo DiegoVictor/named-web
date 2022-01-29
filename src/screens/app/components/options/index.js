@@ -101,8 +101,8 @@ Options.propTypes = {
       category: PropTypes.string.isRequired,
       color: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
-    }).isRequired
-  ),
+    })
+  ).isRequired,
 };
 
 export default Options;

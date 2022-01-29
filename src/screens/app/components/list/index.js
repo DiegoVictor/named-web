@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 import Name from "../name";
 import { Container } from "./styles";
@@ -29,5 +30,10 @@ function List({ data, onFeedback }) {
     </Container>
   );
 }
+
+List.propTypes = {
+  data: PropTypes.string.isRequired,
+  onFeedback: PropTypes.func.isRequired,
+};
 
 export default List;
