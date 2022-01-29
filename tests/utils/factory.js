@@ -1,8 +1,8 @@
-import faker from "faker";
-import factory from "factory-girl";
+import faker from 'faker';
+import factory from 'factory-girl';
 
 factory.define(
-  "Dataset",
+  'Dataset',
   {},
   {
     id: () => faker.date.past().getTime(),
