@@ -1,6 +1,7 @@
 {
   "name": "name-generator",
   "version": "1.0.0",
+  "license": "MIT",
   "dependencies": {
     "axios": "^0.25.0",
     "prop-types": "^15.8.1",
