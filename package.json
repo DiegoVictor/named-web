@@ -21,9 +21,18 @@
     "@types/faker": "^6.6.9",
     "@types/jest": "^27.4.0",
     "axios-mock-adapter": "^1.20.0",
+    "eslint": "^8.8.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react": "^7.28.0",
+    "eslint-plugin-react-hooks": "^4.3.0",
     "factory-girl": "^5.0.4",
     "faker": "5.5.3",
-    "jest": "^27.4.7"
+    "jest": "^27.4.7",
+    "prettier": "^2.5.1"
   },
   "scripts": {
     "start": "react-scripts start",
