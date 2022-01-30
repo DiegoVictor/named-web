@@ -1,4 +1,4 @@
-# [Web] Name Generator
+# [Web] Named
 [![react](https://img.shields.io/badge/reactjs-17.0.2-61dafb?style=flat-square&logo=react)](https://reactjs.org/)
 [![styled-components](https://img.shields.io/badge/styled_components-5.3.3-db7b86?style=flat-square&logo=styled-components)](https://styled-components.com/)
 [![eslint](https://img.shields.io/badge/eslint-8.8.0-4b32c3?style=flat-square&logo=eslint)](https://eslint.org/)
@@ -23,7 +23,7 @@ Generates names based on preseted datasets (list of example names), but you can 
 
 # Screenshots
 Click to expand.<br>
-<img src="https://raw.githubusercontent.com/DiegoVictor/name-generator-web/main/screenshots/demo.gif" width="100%"/>
+<img src="https://raw.githubusercontent.com/DiegoVictor/named-web/main/screenshots/demo.gif" width="100%"/>
 
 
 # Installing
@@ -38,7 +38,7 @@ $ npm install
 > Was installed and configured the [`eslint`](https://eslint.org/) and [`prettier`](https://prettier.io/) to keep the code clean and patterned.
 
 ## Configuring
-Configure your environment variables and remember to start the [API](https://github.com/DiegoVictor/name-generator-api) before to start this app.
+Configure your environment variables and remember to start the [API](https://github.com/DiegoVictor/named-api) before to start this app.
 
 ### .env
 In this file you may configure the API's url. Rename the `.env.example` in the root directory to `.env` then just update with your settings.
@@ -48,7 +48,7 @@ key|description|default
 REACT_APP_API_URL|API's url with version (v1)|`http://localhost:8080`
 
 ### API
-Start the [API](https://github.com/DiegoVictor/name-generator-api) (see its README for more information). In case of any change in the API's `port` or `host` remember to update the [`.env`](#env) too.
+Start the [API](https://github.com/DiegoVictor/named-api) (see its README for more information). In case of any change in the API's `port` or `host` remember to update the [`.env`](#env) too.
 
 
 # Usage
