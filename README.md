@@ -1,4 +1,5 @@
 # [Web] Named
+[![Netlify Status](https://api.netlify.com/api/v1/badges/330304c0-8ddf-4b83-a0e5-bb14e1dfe193/deploy-status)](https://app.netlify.com/sites/name-generator-app/deploys)
 [![react](https://img.shields.io/badge/reactjs-17.0.2-61dafb?style=flat-square&logo=react)](https://reactjs.org/)
 [![styled-components](https://img.shields.io/badge/styled_components-5.3.3-db7b86?style=flat-square&logo=styled-components)](https://styled-components.com/)
 [![eslint](https://img.shields.io/badge/eslint-8.8.0-4b32c3?style=flat-square&logo=eslint)](https://eslint.org/)
