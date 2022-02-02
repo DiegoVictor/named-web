@@ -35,7 +35,7 @@ function Options({ open, data, onSelect }) {
         onSelect(
           {
             id: response.data.id,
-            category: 'Custom',
+            category: 'Temporary',
             // eslint-disable-next-line no-bitwise
             color: `#${((Math.random() * 0xffffff) << 0)
               .toString(16)

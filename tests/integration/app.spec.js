@@ -101,7 +101,7 @@ describe('App', () => {
     const { getByTestId, getByText, getByPlaceholderText, queryByText } =
       render(<App />);
 
-    expect(queryByText('Custom')).not.toBeInTheDocument();
+    expect(queryByText('Temporary')).not.toBeInTheDocument();
 
     await act(async () => {
       fireEvent.change(getByTestId('file'), {
@@ -112,7 +112,7 @@ describe('App', () => {
       fireEvent.focus(getByPlaceholderText('Choose a datasets'));
     });
 
-    await waitFor(() => getByText('Custom'));
+    await waitFor(() => getByText('Temporary'));
     expect(getByTestId(`option-${id}`)).toBeInTheDocument();
   });
 
