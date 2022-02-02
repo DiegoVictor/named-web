@@ -10,7 +10,7 @@ function List({ data, onFeedback }) {
       {data.map((item) => {
         return (
           <Name
-            key={`${item.name}`}
+            key={item.name}
             value={item.name}
             onFeedback={(value) => {
               const updatedNames = [...data];
@@ -32,7 +32,11 @@ function List({ data, onFeedback }) {
 }
 
 List.propTypes = {
-  data: PropTypes.string.isRequired,
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+    })
+  ).isRequired,
   onFeedback: PropTypes.func.isRequired,
 };
 
