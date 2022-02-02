@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 
 import Input from 'components/input';
 import { Modal } from 'components/modal/styles';
+import api from 'services/api';
 import Options from '../options';
 
 function Search({ onSelect }) {
@@ -14,12 +15,10 @@ function Search({ onSelect }) {
   const [results, setResults] = useState([]);
   const [datasets, setDatasets] = useState([]);
   useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_API_BASE_URL}/datasets`)
-      .then((response) => {
-        setDatasets(response.data);
-        setResults(response.data);
-      });
+    api.get('/datasets').then((response) => {
+      setDatasets(response.data);
+      setResults(response.data);
+    });
   }, []);
 
   const [open, setOpen] = useState(false);

@@ -2,8 +2,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { AiOutlineReload } from 'react-icons/ai';
 import { BiLoaderAlt } from 'react-icons/bi';
 import { BsArrowRightSquareFill } from 'react-icons/bs';
-import axios from 'axios';
 
+import api from 'services/api';
 import Search from './components/search';
 import List from './components/list';
 import { Actions, Button, Container } from './styles';
@@ -16,8 +16,8 @@ function App() {
   const reList = useCallback(() => {
     setLoading('list');
 
-    axios
-      .get(`${process.env.REACT_APP_API_BASE_URL}/names`, {
+    api
+      .get('/names', {
         params: {
           dataset: dataset.id,
           tmp: String(dataset.tmp || 0),
@@ -41,9 +41,9 @@ function App() {
 
   const sendFeedback = useCallback(() => {
     setLoading('feedback');
-    axios
+    api
       .post(
-        `${process.env.REACT_APP_API_BASE_URL}/datasets/${dataset.id}/feedbacks`,
+        `/datasets/${dataset.id}/feedbacks`,
         names.filter(({ value }) => value && value !== 0)
       )
       .then(() => {

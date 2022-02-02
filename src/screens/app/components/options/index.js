@@ -1,9 +1,9 @@
 import React, { useCallback, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { IoMdCloudUpload } from 'react-icons/io';
-import axios from 'axios';
 
 import Tag from 'components/tag';
+import api from 'services/api';
 import { Container, Dataset, File, NotFound } from './styles';
 
 function Options({ open, data, onSelect }) {
@@ -30,26 +30,22 @@ function Options({ open, data, onSelect }) {
           const formData = new FormData();
 
           formData.append('file', file);
-          axios
-            .post(`${process.env.REACT_APP_API_BASE_URL}/upload`, formData)
-            .then((response) => {
-              onSelect(
-                {
-                  id: response.data.id,
-                  category: 'Custom',
-                  // eslint-disable-next-line no-bitwise
-                  color: `#${((Math.random() * 0xffffff) << 0)
-                    .toString(16)
-                    .padStart(6, '0')}`,
-                  title: file.name,
-                  tmp: 1,
-                },
-                true
-              );
-              setUploading(false);
-            });
-        }
-        alert('The CSV file must have at least 23 names');
+      return api.post('/upload', formData).then((response) => {
+        onSelect(
+          {
+            id: response.data.id,
+            category: 'Custom',
+            // eslint-disable-next-line no-bitwise
+            color: `#${((Math.random() * 0xffffff) << 0)
+              .toString(16)
+              .padStart(6, '0')}`,
+            title: file.name,
+            tmp: 1,
+          },
+          true
+        );
+        setUploading(false);
+      });
       };
       reader.readAsText(fileRef.current.files[0]);
     }
