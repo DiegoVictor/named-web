@@ -1,60 +1,43 @@
 import React from 'react';
 import { act, fireEvent, render, waitFor } from '@testing-library/react';
 import Adapter from 'axios-mock-adapter';
-import axios from 'axios';
 import faker from 'faker';
 
+import api from '../../src/services/api';
 import factory from '../utils/factory';
 import App from '../../src/screens/app';
 
-const mock = new Adapter(axios);
+const mock = new Adapter(api);
+const baseUrl = 'http://localhost:8080';
 
 jest.useFakeTimers();
 
 describe('App', () => {
   beforeAll(() => {
-    process.env.REACT_APP_API_BASE_URL = 'http://localhost:8080';
+    process.env.REACT_APP_API_BASE_URL = baseUrl;
   });
 
-  it('should be able to search a dataset', async () => {
+  it('should be able to search between datasets', async () => {
     const datasets = await factory.attrsMany('Dataset', 3);
+    mock.onGet('/datasets').reply(200, datasets);
 
-    mock
-      .onGet(`${process.env.REACT_APP_API_BASE_URL}/datasets`)
-      .reply(200, datasets);
+    const { getByPlaceholderText, queryByText, getByText, getByTestId } =
+      render(<App />);
 
-    const { getByPlaceholderText, queryByText, getByTestId } = render(<App />);
+    const [dataset, ...rest] = datasets;
+    await waitFor(() => getByText(dataset.title));
 
-    const [dataset] = datasets;
+    expect(getByTestId('options')).toHaveStyle({ 'max-height': '0px' });
     const input = getByPlaceholderText('Choose a datasets');
+    await act(async () => {
+      fireEvent.focus(input);
+    });
+    expect(getByTestId('options')).toHaveStyle({ 'max-height': '300px' });
 
     await act(async () => {
       fireEvent.change(input, { target: { value: dataset.title } });
     });
-
-    datasets.slice(1).forEach(({ title }) => {
-      expect(queryByText(title)).not.toBeInTheDocument();
-    });
-    expect(getByTestId(`option-${dataset.id}`)).toBeInTheDocument();
-  });
-
-  it('should be able to clear the search', async () => {
-    const datasets = await factory.attrsMany('Dataset', 3);
-
-    mock
-      .onGet(`${process.env.REACT_APP_API_BASE_URL}/datasets`)
-      .reply(200, datasets);
-
-    const { getByPlaceholderText, queryByText, getByTestId } = render(<App />);
-
-    const [dataset] = datasets;
-    const input = getByPlaceholderText('Choose a datasets');
-
-    await act(async () => {
-      fireEvent.change(input, { target: { value: dataset.title } });
-    });
-
-    datasets.slice(1).forEach(({ title }) => {
+    rest.forEach(({ title }) => {
       expect(queryByText(title)).not.toBeInTheDocument();
     });
     expect(getByTestId(`option-${dataset.id}`)).toBeInTheDocument();
@@ -65,53 +48,28 @@ describe('App', () => {
     datasets.forEach(({ title }) => {
       expect(queryByText(title)).toBeInTheDocument();
     });
-  });
-
-  it('should the list be closed after lost focus', async () => {
-    const datasets = await factory.attrsMany('Dataset', 3);
-
-    mock
-      .onGet(`${process.env.REACT_APP_API_BASE_URL}/datasets`)
-      .reply(200, datasets);
-
-    const { getByPlaceholderText, getByText, getByTestId } = render(<App />);
-
-    const [dataset] = datasets;
-    await waitFor(() => getByText(dataset.title));
-
-    expect(getByTestId('options')).toHaveStyle({ 'max-height': '0px' });
-
-    const input = getByPlaceholderText('Choose a datasets');
-    await act(async () => {
-      fireEvent.focus(input);
-    });
-
-    expect(getByTestId('options')).toHaveStyle({ 'max-height': '300px' });
 
     await act(async () => {
       fireEvent.blur(input);
       jest.advanceTimersByTime(1000);
     });
-
     expect(getByTestId('options')).toHaveStyle({ 'max-height': '0px' });
   });
 
-  it('should be able to get generated names', async () => {
+  it('should be able to get generated names list', async () => {
     const datasets = await factory.attrsMany('Dataset', 3);
     const names = Array.from({ length: 6 }, () => faker.name.findName());
 
     mock
-      .onGet(`${process.env.REACT_APP_API_BASE_URL}/datasets`)
+      .onGet('/datasets')
       .reply(200, datasets)
-      .onGet(`${process.env.REACT_APP_API_BASE_URL}/names`)
+      .onGet('/names')
       .reply(200, names);
 
     const { getByPlaceholderText, getByTestId, getByText } = render(<App />);
 
-    const input = getByPlaceholderText('Choose a datasets');
-
     await act(async () => {
-      fireEvent.focus(input);
+      fireEvent.focus(getByPlaceholderText('Choose a datasets'));
     });
 
     const [dataset] = datasets;
@@ -125,7 +83,7 @@ describe('App', () => {
   });
 
   it('should be able to upload a custom dataset', async () => {
-    const [dataset, ...datasets] = await factory.attrsMany('Dataset', 3);
+    const [{ id }, ...datasets] = await factory.attrsMany('Dataset', 3);
 
     const csv = Array.from(
       { length: 50 },
@@ -135,30 +93,31 @@ describe('App', () => {
     const file = new File(csv, 'file.csv');
 
     mock
-      .onGet(`${process.env.REACT_APP_API_BASE_URL}/datasets`)
+      .onGet('/datasets')
       .reply(200, datasets)
-      .onPost(`${process.env.REACT_APP_API_BASE_URL}/upload`)
-      .reply(200, { id: dataset.id });
+      .onPost('/upload')
+      .reply(200, { id });
 
-    const { getByTestId, getByText, getByPlaceholderText } = render(<App />);
+    const { getByTestId, getByText, getByPlaceholderText, queryByText } =
+      render(<App />);
+
+    expect(queryByText('Custom')).not.toBeInTheDocument();
 
     await act(async () => {
       fireEvent.change(getByTestId('file'), {
         target: { files: [file] },
       });
     });
-
     await act(async () => {
       fireEvent.focus(getByPlaceholderText('Choose a datasets'));
     });
 
     await waitFor(() => getByText('Custom'));
-
-    expect(getByTestId(`option-${dataset.id}`)).toBeInTheDocument();
+    expect(getByTestId(`option-${id}`)).toBeInTheDocument();
   });
 
   it('should not be able to upload a dataset without headers', async () => {
-    const [dataset, ...datasets] = await factory.attrsMany('Dataset', 3);
+    const [{ id }, ...datasets] = await factory.attrsMany('Dataset', 3);
 
     const csv = Array.from(
       { length: 50 },
@@ -167,10 +126,10 @@ describe('App', () => {
     const file = new File(csv, 'file.csv');
 
     mock
-      .onGet(`${process.env.REACT_APP_API_BASE_URL}/datasets`)
+      .onGet('/datasets')
       .reply(200, datasets)
-      .onPost(`${process.env.REACT_APP_API_BASE_URL}/upload`)
-      .reply(200, { id: dataset.id });
+      .onPost('/upload')
+      .reply(200, { id });
 
     const alert = jest.fn();
     window.alert = alert;
@@ -186,14 +145,13 @@ describe('App', () => {
     await act(async () => {
       fireEvent.focus(getByPlaceholderText('Choose a datasets'));
     });
-
     expect(alert).toHaveBeenCalledWith(
       'The first line must be the header "name"'
     );
   });
 
-  it('should not be able to upload a dataset without enough data', async () => {
-    const [dataset, ...datasets] = await factory.attrsMany('Dataset', 3);
+  it('should not be able to upload a dataset without enough names sample', async () => {
+    const [{ id }, ...datasets] = await factory.attrsMany('Dataset', 3);
 
     const csv = Array.from(
       { length: 5 },
@@ -203,10 +161,10 @@ describe('App', () => {
     const file = new File(csv, 'file.csv');
 
     mock
-      .onGet(`${process.env.REACT_APP_API_BASE_URL}/datasets`)
+      .onGet('/datasets')
       .reply(200, datasets)
-      .onPost(`${process.env.REACT_APP_API_BASE_URL}/upload`)
-      .reply(200, { id: dataset.id });
+      .onPost('/upload')
+      .reply(200, { id });
 
     const alert = jest.fn();
     window.alert = alert;
@@ -222,7 +180,6 @@ describe('App', () => {
     await act(async () => {
       fireEvent.focus(getByPlaceholderText('Choose a datasets'));
     });
-
     expect(alert).toHaveBeenCalledWith(
       'The CSV file must have at least 23 names'
     );
@@ -230,62 +187,63 @@ describe('App', () => {
 
   it('should be able to give feedback to generated names', async () => {
     const datasets = await factory.attrsMany('Dataset', 3);
+
     const names = Array.from({ length: 6 }, () => faker.name.findName());
-    const [good, bad] = names;
+    const [goodFeedback, badFeedback] = names;
 
     mock
-      .onGet(`${process.env.REACT_APP_API_BASE_URL}/datasets`)
+      .onGet('/datasets')
       .reply(200, datasets)
-      .onGet(`${process.env.REACT_APP_API_BASE_URL}/names`)
+      .onGet('/names')
       .reply(200, names)
-      .onPost(
-        new RegExp(
-          `${process.env.REACT_APP_API_BASE_URL}/datasets/\\d+/feedbacks`
-        )
-      )
+      .onPost(/datasets\/\d+\/feedbacks/gi)
       .reply((config) => {
         const data = JSON.parse(config.data);
 
-        [bad, good].forEach((item, index) => {
-          expect(data.find(({ name }) => name === item)).toStrictEqual({
-            name: item,
-            value: index > 0 ? 1 : -1,
-          });
-        });
+        expect(data).toStrictEqual([
+          {
+            name: goodFeedback,
+            value: 1,
+          },
+          {
+            name: badFeedback,
+            value: -1,
+          },
+        ]);
         return [200];
       });
 
     const { getByPlaceholderText, getByTestId, getByText } = render(<App />);
 
-    const input = getByPlaceholderText('Choose a datasets');
-
     await act(async () => {
-      fireEvent.focus(input);
+      fireEvent.focus(getByPlaceholderText('Choose a datasets'));
     });
 
-    const [dataset] = datasets;
+    const [{ id }] = datasets;
     await act(async () => {
-      fireEvent.click(getByTestId(`option-${dataset.id}`));
+      fireEvent.click(getByTestId(`option-${id}`));
     });
 
     names.forEach((name) => {
       expect(getByText(name)).toBeInTheDocument();
     });
 
-    [good, bad, bad].forEach((item) => {
-      fireEvent.click(getByTestId(`name-${item.replace(/\s/gi, '')}`));
-    });
+    const regex = /\s/gi;
+    fireEvent.click(getByTestId(`name-${goodFeedback.replace(regex, '')}`));
+    Array.from({ length: 2 }, () =>
+      fireEvent.click(getByTestId(`name-${badFeedback.replace(regex, '')}`))
+    );
 
-    const feedbackButton = getByTestId('feedback');
+    const sendFeedbackButton = getByTestId('feedback');
     await act(async () => {
-      fireEvent.click(feedbackButton);
+      fireEvent.click(sendFeedbackButton);
     });
-    expect(feedbackButton).toBeDisabled();
+    expect(sendFeedbackButton).toBeDisabled();
 
     await act(async () => {
       jest.advanceTimersByTime(1000);
     });
-    expect(feedbackButton).not.toBeDisabled();
+    expect(sendFeedbackButton).not.toBeDisabled();
   });
 
   it('should be able to get more generated names', async () => {
@@ -294,26 +252,23 @@ describe('App', () => {
 
     mock.reset();
     mock
-      .onGet(`${process.env.REACT_APP_API_BASE_URL}/datasets`)
+      .onGet('/datasets')
       .reply(200, datasets)
-      .onGet(`${process.env.REACT_APP_API_BASE_URL}/names`)
+      .onGet('/names')
       .replyOnce(200, names.slice(0, 6))
-      .onGet(`${process.env.REACT_APP_API_BASE_URL}/names`)
+      .onGet('/names')
       .replyOnce(200, names.slice(6));
 
     const { getByPlaceholderText, getByTestId, getByText } = render(<App />);
 
-    const input = getByPlaceholderText('Choose a datasets');
-
     await act(async () => {
-      fireEvent.focus(input);
+      fireEvent.focus(getByPlaceholderText('Choose a datasets'));
     });
 
-    const [dataset] = datasets;
+    const [{ id }] = datasets;
     await act(async () => {
-      fireEvent.click(getByTestId(`option-${dataset.id}`));
+      fireEvent.click(getByTestId(`option-${id}`));
     });
-
     names.slice(0, 6).forEach((name) => {
       expect(getByText(name)).toBeInTheDocument();
     });
@@ -321,7 +276,6 @@ describe('App', () => {
     await act(async () => {
       fireEvent.click(getByTestId('refresh'));
     });
-
     names.slice(6).forEach((name) => {
       expect(getByText(name)).toBeInTheDocument();
     });
