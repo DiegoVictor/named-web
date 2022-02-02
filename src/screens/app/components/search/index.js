@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { GoSearch } from 'react-icons/go';
 import { GrFormClose } from 'react-icons/gr';
-import axios from 'axios';
 import PropTypes from 'prop-types';
 
 import Input from 'components/input';
@@ -49,7 +48,7 @@ function Search({ onSelect }) {
         }
         value={query}
         right={
-          query.length > 0 && (
+          query.length > 0 ? (
             <button
               type="button"
               data-testid="clear"
@@ -60,7 +59,7 @@ function Search({ onSelect }) {
             >
               <GrFormClose size={26} color="#CBCDD7" />
             </button>
-          )
+          ) : null
         }
       />
       <Options
