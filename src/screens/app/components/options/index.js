@@ -11,25 +11,26 @@ function Options({ open, data, onSelect }) {
   const [uploading, setUploading] = useState(false);
 
   const upload = useCallback(() => {
-    if (fileRef.current.files) {
-      const [file] = fileRef.current.files;
-      const reader = new FileReader();
+    const [file] = fileRef.current.files;
+    const reader = new FileReader();
 
-      reader.onload = (event) => {
-        if (event.target.result.search(/^name\r?\n/i) === -1) {
-          alert('The first line must be the header "name"');
-          setUploading(false);
-          return;
-        }
+    reader.onload = (event) => {
+      if (event.target.result.search(/^name\r?\n/i) === -1) {
+        setUploading(false);
+        return alert('The first line must be the header "name"');
+      }
 
-        const rows = event.target.result
-          .replace(/(^name\r?\n|\r)/gi, '')
-          .split('\n');
+      const rows = event.target.result
+        .replace(/(^name\r?\n|\r)/gi, '')
+        .split('\n');
 
-        if (rows.length > 22) {
-          const formData = new FormData();
+      if (rows.length < 23) {
+        return alert('The CSV file must have at least 23 names');
+      }
 
-          formData.append('file', file);
+      const formData = new FormData();
+
+      formData.append('file', file);
       return api.post('/upload', formData).then((response) => {
         onSelect(
           {
@@ -46,9 +47,8 @@ function Options({ open, data, onSelect }) {
         );
         setUploading(false);
       });
-      };
-      reader.readAsText(fileRef.current.files[0]);
-    }
+    };
+    reader.readAsText(fileRef.current.files[0]);
   }, [onSelect]);
 
   return (
