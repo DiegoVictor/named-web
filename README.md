@@ -11,7 +11,7 @@
 
 Generates names based on preseted datasets (list of example names), but you can upload a custom dataset (it must have at least 23 names). Was utilized the Markov Chain algorithm to generate the names, a custom script was created based on this article: [Generating Startup names with Markov Chains](https://towardsdatascience.com/generating-startup-names-with-markov-chains-2a33030a4ac0).
 
-Live Demo: https://name-generator-app.netlify.app
+Live Demo: https://named.netlify.app/
 
 
 ## Table of Contents
