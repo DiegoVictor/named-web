@@ -1,4 +1,4 @@
-import faker from 'faker';
+import faker from '@faker-js/faker';
 import factory from 'factory-girl';
 
 factory.define(
@@ -8,7 +8,7 @@ factory.define(
     id: () => faker.date.past().getTime(),
     category: faker.commerce.department,
     color: faker.vehicle.color,
-    title: faker.name.title,
+    title: faker.commerce.productName,
   }
 );
 
