@@ -1,5 +1,4 @@
 # [Web] Named
-[![Netlify Status](https://api.netlify.com/api/v1/badges/330304c0-8ddf-4b83-a0e5-bb14e1dfe193/deploy-status)](https://app.netlify.com/sites/name-generator-app/deploys)
 ![CircleCI](https://img.shields.io/circleci/build/github/DiegoVictor/named-web?style=flat-square&logo=circleci)
 [![react](https://img.shields.io/badge/reactjs-17.0.2-61dafb?style=flat-square&logo=react)](https://reactjs.org/)
 [![styled-components](https://img.shields.io/badge/styled_components-5.3.3-db7b86?style=flat-square&logo=styled-components)](https://styled-components.com/)
@@ -11,9 +10,6 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 
 Generates names based on preseted datasets (list of example names), but you can upload a custom dataset (it must have at least 23 names). Was utilized the Markov Chain algorithm to generate the names, a custom script was created based on this article: [Generating Startup names with Markov Chains](https://towardsdatascience.com/generating-startup-names-with-markov-chains-2a33030a4ac0).
-
-Live Demo: https://named.netlify.app/
-
 
 ## Table of Contents
 * [Screenshots](#screenshots)
